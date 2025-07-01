@@ -1,4 +1,4 @@
-# Attention is Key 🎵🔑
+# Attention is Key
 
 *A powerful tool for visualizing how Large Language Models interpret and attend to different words in song lyrics as context evolves throughout the song.*
 
@@ -207,6 +207,6 @@ If you encounter any issues or have questions:
 
 ---
 
-**Live Demo**: [https://vercel.com/audreys-projects-1f0650f0/v0-attention-is-key](https://vercel.com/audreys-projects-1f0650f0/v0-attention-is-key)
+**Live Demo**: [https://v0-attention-is-key.vercel.app/](https://v0-attention-is-key.vercel.app/)
 
 **Continue building**: [https://v0.dev/chat/projects/iZ6wz7dFBLd](https://v0.dev/chat/projects/iZ6wz7dFBLd)
