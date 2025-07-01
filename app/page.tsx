@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Music, Brain, Eye, Play } from "lucide-react"
+import { RotateCcw } from "lucide-react"
 import AttentionHeatmap from "@/components/attention-heatmap"
 import PhraseEvolutionChart from "@/components/phrase-evolution-chart"
 import ModelSelector from "@/components/model-selector"
@@ -44,6 +44,7 @@ export default function AttentionIsKey() {
   const [phraseAnalysis, setPhraseAnalysis] = useState<PhraseAnalysis | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("overview")
+  const [analysisComplete, setAnalysisComplete] = useState(false)
 
   const sampleLyrics = `I walk alone down this empty street
 The city lights are calling me
@@ -64,6 +65,8 @@ This is who I'm meant to be`
     if (!lyrics.trim()) return
 
     setIsLoading(true)
+    setAnalysisComplete(false)
+
     try {
       // Simulate API call to Python backend
       await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -97,6 +100,9 @@ This is who I'm meant to be`
         }
         setPhraseAnalysis(mockPhraseAnalysis)
       }
+
+      // Set analysis complete
+      setAnalysisComplete(true)
     } catch (error) {
       console.error("Analysis failed:", error)
     } finally {
@@ -104,78 +110,99 @@ This is who I'm meant to be`
     }
   }
 
+  const handleReset = () => {
+    setAnalysisComplete(false)
+    setAttentionData(null)
+    setPhraseAnalysis(null)
+    setLyrics("")
+    setTargetPhrase("")
+    setActiveTab("input")
+  }
+
   const loadSample = () => {
     setLyrics(sampleLyrics)
     setTargetPhrase("I walk alone")
   }
 
+  const navigateToResults = (tab: string) => {
+    setActiveTab(tab)
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#F55AC2] via-purple-500 to-[#201A39]">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Music className="h-8 w-8 text-purple-600" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Attention is Key
-            </h1>
-            <Brain className="h-8 w-8 text-blue-600" />
+        <div className="text-center mb-12">
+          <div className="mb-6">
+            <h1 className="text-6xl font-bold text-white mb-4 tracking-tight">Attention is Key</h1>
+            <div className="w-24 h-1 bg-white mx-auto mb-6"></div>
           </div>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-white max-w-4xl mx-auto leading-relaxed">
             Visualize how Large Language Models interpret and attend to different words in song lyrics as context
             evolves throughout the song. Where musical keys meet transformer attention keys.
           </p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="input">Input & Analysis</TabsTrigger>
-            <TabsTrigger value="attention">Attention Patterns</TabsTrigger>
-            <TabsTrigger value="evolution">Phrase Evolution</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          <TabsList className="grid w-full grid-cols-4 bg-white/10 backdrop-blur-sm border border-white/20">
+            <TabsTrigger
+              value="overview"
+              className="data-[state=active]:bg-white data-[state=active]:text-[#201A39] text-white"
+            >
+              Overview
+            </TabsTrigger>
+            <TabsTrigger
+              value="input"
+              className="data-[state=active]:bg-white data-[state=active]:text-[#201A39] text-white"
+            >
+              Input & Analysis
+            </TabsTrigger>
+            <TabsTrigger
+              value="attention"
+              className="data-[state=active]:bg-white data-[state=active]:text-[#201A39] text-white"
+            >
+              Attention Patterns
+            </TabsTrigger>
+            <TabsTrigger
+              value="evolution"
+              className="data-[state=active]:bg-white data-[state=active]:text-[#201A39] text-white"
+            >
+              Phrase Evolution
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card>
+          <TabsContent value="overview" className="space-y-8">
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Eye className="h-5 w-5" />
-                    Attention Visualization
-                  </CardTitle>
+                  <CardTitle className="text-[#201A39] text-xl">Attention Visualization</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-gray-700 leading-relaxed">
                     See how transformer models attend to different words in your lyrics, revealing the AI's
                     understanding of semantic relationships.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Brain className="h-5 w-5" />
-                    Multiple Models
-                  </CardTitle>
+                  <CardTitle className="text-[#201A39] text-xl">Multiple Models</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-gray-700 leading-relaxed">
                     Compare attention patterns across BERT, RoBERTa, and GPT-2 to understand how different architectures
                     interpret the same lyrics.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Music className="h-5 w-5" />
-                    Narrative Evolution
-                  </CardTitle>
+                  <CardTitle className="text-[#201A39] text-xl">Narrative Evolution</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-gray-700 leading-relaxed">
                     Track how repeated phrases gain different semantic meaning based on their narrative context
                     throughout the song.
                   </p>
@@ -183,57 +210,74 @@ This is who I'm meant to be`
               </Card>
             </div>
 
-            <Card>
+            <Card className="bg-white shadow-lg">
               <CardHeader>
-                <CardTitle>🚀 Features</CardTitle>
+                <CardTitle className="text-[#201A39] text-2xl">Features</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Badge variant="secondary">✨ Real attention scores from transformer models</Badge>
-                    <Badge variant="secondary">🎨 Beautiful, interactive D3.js visualizations</Badge>
-                    <Badge variant="secondary">🤖 Support for BERT, RoBERTa, GPT-2</Badge>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <Badge variant="secondary" className="bg-[#F55AC2] text-white">
+                      Real attention scores from transformer models
+                    </Badge>
+                    <Badge variant="secondary" className="bg-[#F55AC2] text-white">
+                      Beautiful, interactive D3.js visualizations
+                    </Badge>
+                    <Badge variant="secondary" className="bg-[#F55AC2] text-white">
+                      Support for BERT, RoBERTa, GPT-2
+                    </Badge>
                   </div>
-                  <div className="space-y-2">
-                    <Badge variant="secondary">📸 Export high-resolution images</Badge>
-                    <Badge variant="secondary">📊 Compare attention across phrase occurrences</Badge>
-                    <Badge variant="outline">🎵 Coming v2: Real-time audio sync</Badge>
+                  <div className="space-y-3">
+                    <Badge variant="secondary" className="bg-[#F55AC2] text-white">
+                      Export high-resolution images
+                    </Badge>
+                    <Badge variant="secondary" className="bg-[#F55AC2] text-white">
+                      Compare attention across phrase occurrences
+                    </Badge>
+                    <Badge variant="outline" className="border-gray-300 text-gray-600">
+                      Coming v2: Real-time audio sync
+                    </Badge>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="input" className="space-y-6">
-            <div className="grid lg:grid-cols-2 gap-6">
-              <Card>
+          <TabsContent value="input" className="space-y-8">
+            <div className="grid lg:grid-cols-2 gap-8">
+              <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle>Song Lyrics</CardTitle>
+                  <CardTitle className="text-[#201A39] text-xl">Song Lyrics</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Textarea
                     placeholder="Paste your song lyrics here..."
                     value={lyrics}
                     onChange={(e) => setLyrics(e.target.value)}
-                    className="min-h-[300px] font-mono text-sm"
+                    className="min-h-[300px] font-mono text-sm border-gray-200 text-gray-900"
                   />
-                  <Button onClick={loadSample} variant="outline" className="w-full bg-transparent">
+                  <Button
+                    onClick={loadSample}
+                    variant="outline"
+                    className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent"
+                  >
                     Load Sample Lyrics
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-white shadow-lg">
                 <CardHeader>
-                  <CardTitle>Analysis Settings</CardTitle>
+                  <CardTitle className="text-[#201A39] text-xl">Analysis Settings</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Target Phrase (Optional)</label>
+                    <label className="text-sm font-medium mb-2 block text-gray-700">Target Phrase (Optional)</label>
                     <Input
                       placeholder="e.g., 'I walk alone'"
                       value={targetPhrase}
                       onChange={(e) => setTargetPhrase(e.target.value)}
+                      className="border-gray-200 text-gray-900"
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       Analyze how attention to this phrase evolves throughout the song
@@ -242,45 +286,91 @@ This is who I'm meant to be`
 
                   <ModelSelector selectedModel={selectedModel} onModelChange={setSelectedModel} />
 
-                  <Button onClick={handleAnalyze} disabled={!lyrics.trim() || isLoading} className="w-full">
-                    {isLoading ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                        Analyzing...
-                      </>
-                    ) : (
-                      <>
-                        <Play className="h-4 w-4 mr-2" />
-                        Analyze Attention
-                      </>
+                  <div className="space-y-3">
+                    <Button
+                      onClick={handleAnalyze}
+                      disabled={!lyrics.trim() || isLoading}
+                      className="w-full bg-[#F55AC2] text-white hover:bg-[#E04A9F]"
+                    >
+                      {isLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                          Analyzing...
+                        </>
+                      ) : (
+                        "Analyze Attention"
+                      )}
+                    </Button>
+
+                    {analysisComplete && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <span className="text-green-800 font-medium">Analysis Complete!</span>
+                          </div>
+                          <Button
+                            onClick={handleReset}
+                            size="sm"
+                            variant="ghost"
+                            className="text-green-700 hover:text-green-800 hover:bg-green-100 p-1"
+                          >
+                            <RotateCcw className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <p className="text-green-700 text-sm">
+                          Your attention analysis is ready. Click below to explore the results:
+                        </p>
+                        <div className="flex gap-2 flex-wrap">
+                          <Button
+                            onClick={() => navigateToResults("attention")}
+                            size="sm"
+                            className="bg-[#F55AC2] text-white hover:bg-[#E04A9F]"
+                          >
+                            View Attention Patterns →
+                          </Button>
+                          {targetPhrase && (
+                            <Button
+                              onClick={() => navigateToResults("evolution")}
+                              size="sm"
+                              variant="outline"
+                              className="border-[#F55AC2] text-[#F55AC2] hover:bg-[#F55AC2] hover:text-white"
+                            >
+                              View Phrase Evolution →
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                     )}
-                  </Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
 
-          <TabsContent value="attention" className="space-y-6">
+          <TabsContent value="attention" className="space-y-8">
             {attentionData ? (
               <AttentionHeatmap data={attentionData} />
             ) : (
-              <Card>
-                <CardContent className="text-center py-12">
-                  <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Run an analysis to see attention patterns</p>
+              <Card className="bg-white shadow-lg">
+                <CardContent className="text-center py-16">
+                  <div className="text-6xl mb-4">🧠</div>
+                  <p className="text-gray-600 text-lg">Run an analysis to see attention patterns</p>
                 </CardContent>
               </Card>
             )}
           </TabsContent>
 
-          <TabsContent value="evolution" className="space-y-6">
+          <TabsContent value="evolution" className="space-y-8">
             {phraseAnalysis ? (
               <PhraseEvolutionChart data={phraseAnalysis} />
             ) : (
-              <Card>
-                <CardContent className="text-center py-12">
-                  <Music className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Specify a target phrase and run analysis to see phrase evolution</p>
+              <Card className="bg-white shadow-lg">
+                <CardContent className="text-center py-16">
+                  <div className="text-6xl mb-4">🎵</div>
+                  <p className="text-gray-600 text-lg">
+                    Specify a target phrase and run analysis to see phrase evolution
+                  </p>
                 </CardContent>
               </Card>
             )}

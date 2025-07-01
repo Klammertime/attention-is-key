@@ -5,22 +5,22 @@
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/audreys-projects-1f0650f0/v0-attention-is-key)
 [![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/iZ6wz7dFBLd)
 
-## 🎯 Project Overview
+## Project Overview
 
 Attention is Key demonstrates how transformer models (like BERT, RoBERTa, GPT-2) interpret and attend to different words in song lyrics, revealing how the same phrase can have dramatically different attention patterns based on its context in the song. Perfect for understanding how AI models process narrative and emotional evolution in text.
 
 **Where musical keys meet transformer attention keys, revealing the key insights in how AI understands evolving narratives in music.**
 
-## 🚀 Features
+## Features
 
-- ✨ **Real attention scores** from transformer models (BERT, RoBERTa, GPT-2)
-- 🎨 **Beautiful, interactive visualizations** using D3.js
-- 🤖 **Multiple model support** for comparing attention patterns
-- 📸 **Export visualizations** as high-resolution SVG images
-- 📊 **Phrase evolution analysis** across different occurrences
-- 🎵 **Coming in v2**: Real-time visualization synced with audio playback
+- Real attention scores from transformer models (BERT, RoBERTa, GPT-2)
+- Beautiful, interactive visualizations using D3.js
+- Multiple model support for comparing attention patterns
+- Export visualizations as high-resolution SVG images
+- Phrase evolution analysis across different occurrences
+- Coming in v2: Real-time visualization synced with audio playback
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**: Next.js 15, React 19, TypeScript
 - **Styling**: Tailwind CSS, shadcn/ui components
@@ -29,7 +29,7 @@ Attention is Key demonstrates how transformer models (like BERT, RoBERTa, GPT-2)
 - **AI Models**: BERT, RoBERTa, GPT-2, DistilBERT
 - **Deployment**: Vercel
 
-## 📋 Requirements
+## Requirements
 
 ### Frontend
 - Node.js 18+ 
@@ -39,7 +39,7 @@ Attention is Key demonstrates how transformer models (like BERT, RoBERTa, GPT-2)
 - Python 3.8+
 - CUDA-capable GPU (optional, for faster processing)
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the Repository
 
@@ -90,7 +90,7 @@ pip install torch transformers numpy
 python scripts/attention_extractor.py
 \`\`\`
 
-## 🎵 How to Use
+## How to Use
 
 1. **Navigate to the app** at [http://localhost:3000](http://localhost:3000)
 
@@ -116,7 +116,7 @@ python scripts/attention_extractor.py
    - Download attention heatmaps as SVG files
    - Compare attention patterns across different models
 
-## 📊 Understanding the Visualizations
+## Understanding the Visualizations
 
 ### Attention Heatmap
 - **Rows**: Source tokens (what's paying attention)
@@ -130,7 +130,7 @@ python scripts/attention_extractor.py
 - **Line**: Shows how attention to the phrase changes over time
 - **Points**: Hover for context and detailed information
 
-## 🔧 Project Structure
+## Project Structure
 
 \`\`\`
 attention-is-key/
@@ -151,7 +151,7 @@ attention-is-key/
 └── public/               # Static assets
 \`\`\`
 
-## 🎨 Customization
+## Customization
 
 ### Adding New Models
 1. Update the model list in `components/model-selector.tsx`
@@ -163,7 +163,7 @@ attention-is-key/
 - Update component styles in the respective files
 - Global styles are in `app/globals.css`
 
-## 🚀 Deployment
+## Deployment
 
 ### Deploy to Vercel (Recommended)
 
@@ -178,7 +178,7 @@ npm run build
 npm start
 \`\`\`
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -186,18 +186,18 @@ npm start
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built with [v0.dev](https://v0.dev) for rapid prototyping
 - Powered by [Hugging Face Transformers](https://huggingface.co/transformers/)
 - Visualizations created with [D3.js](https://d3js.org/)
 - UI components from [shadcn/ui](https://ui.shadcn.com/)
 
-## 📞 Support
+## Support
 
 If you encounter any issues or have questions:
 
