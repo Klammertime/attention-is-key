@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import AttentionHeatmap from "@/components/attention-heatmap"
 import PhraseEvolutionChart from "@/components/phrase-evolution-chart"
 import ModelSelector from "@/components/model-selector"
+import BlogSection from "@/components/blog-section"
 
 interface AttentionData {
   model_name: string
@@ -155,7 +156,7 @@ This is who I'm meant to be`
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4 bg-white/10 backdrop-blur-sm border border-white/20">
+          <TabsList className="grid w-full grid-cols-5 bg-white/10 backdrop-blur-sm border border-white/20">
             <TabsTrigger
               value="overview"
               className="data-[state=active]:bg-white data-[state=active]:text-[#201A39] text-white"
@@ -179,6 +180,12 @@ This is who I'm meant to be`
               className="data-[state=active]:bg-white data-[state=active]:text-[#201A39] text-white"
             >
               Phrase Evolution
+            </TabsTrigger>
+            <TabsTrigger
+              value="blog"
+              className="data-[state=active]:bg-white data-[state=active]:text-[#201A39] text-white"
+            >
+              Blog
             </TabsTrigger>
           </TabsList>
 
@@ -385,6 +392,9 @@ This is who I'm meant to be`
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+          <TabsContent value="blog" className="space-y-8">
+            <BlogSection />
           </TabsContent>
         </Tabs>
       </div>
