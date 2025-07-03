@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { RotateCcw } from "lucide-react"
 import AttentionHeatmap from "@/components/attention-heatmap"
 import PhraseEvolutionChart from "@/components/phrase-evolution-chart"
 import ModelSelector from "@/components/model-selector"
@@ -35,6 +34,18 @@ interface PhraseAnalysis {
   }>
   total_occurrences: number
 }
+
+// CSS.gg Reset Icon Component
+const ResetIcon = ({ className }: { className?: string }) => (
+  <div className={`inline-block ${className}`}>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M4.56079 10.6418L6.35394 3.94971L8.25402 4.44382L7.22111 7.12L7.28696 7.1088C10.9121 6.5259 14.6235 8.1018 16.7094 11.2543C18.7954 14.4069 18.8581 18.4906 16.8699 21.7L15.1301 20.7C16.6419 18.2594 16.5956 15.0906 15.0406 12.6957C13.4856 10.3009 10.7144 9.0741 7.97889 9.4912L7.91304 9.5024L8.94595 12.1786L7.04587 12.6727L4.56079 10.6418Z"
+        fill="currentColor"
+      />
+    </svg>
+  </div>
+)
 
 export default function AttentionIsKey() {
   const [lyrics, setLyrics] = useState("")
@@ -315,7 +326,7 @@ This is who I'm meant to be`
                             variant="ghost"
                             className="text-green-700 hover:text-green-800 hover:bg-green-100 p-1"
                           >
-                            <RotateCcw className="h-4 w-4" />
+                            <ResetIcon className="w-4 h-4" />
                           </Button>
                         </div>
                         <p className="text-green-700 text-sm">

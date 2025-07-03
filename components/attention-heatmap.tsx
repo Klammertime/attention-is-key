@@ -51,9 +51,36 @@ export default function AttentionHeatmap({ data }: AttentionHeatmapProps) {
       .range([0, height])
       .padding(0.05)
 
-    const colorScale = d3
+    // Updated color scale to match the plasma/inferno-inspired reference image palette
+    // From very dark purple/black through magentas, reds, oranges to light peach
+    const customColorInterpolator = (t: number) => {
+      const colors = [
+        "#0d0887", // Very dark purple (almost black)
+        "#2d0594", // Dark purple
+        "#4c02a1", // Purple
+        "#6a00a8", // Purple-magenta
+        "#8b0aa5", // Magenta
+        "#a91e9d", // Bright magenta
+        "#c53a8c", // Magenta-red
+        "#dd5470", // Red-pink
+        "#f0744f", // Orange-red
+        "#fb9b06", // Orange
+        "#f7c932", // Yellow-orange
+        "#fcffa4", // Light cream/peach
+      ]
+
+      const scaledT = t * (colors.length - 1)
+      const index = Math.floor(scaledT)
+      const fraction = scaledT - index
+
+      if (index >= colors.length - 1) return colors[colors.length - 1]
+
+      return d3.interpolateRgb(colors[index], colors[index + 1])(fraction)
+    }
+
+    const enhancedColorScale = d3
       .scaleSequential()
-      .interpolator(d3.interpolateRgb("#F55AC2", "#201A39"))
+      .interpolator(customColorInterpolator)
       .domain([0, d3.max(matrix.flat()) || 1])
 
     const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`)
@@ -76,9 +103,9 @@ export default function AttentionHeatmap({ data }: AttentionHeatmapProps) {
       .attr("x", (d) => xScale(d.j.toString()) || 0)
       .attr("width", xScale.bandwidth())
       .attr("height", yScale.bandwidth())
-      .style("fill", (d) => colorScale(d.value))
-      .style("stroke", "white")
-      .style("stroke-width", 1)
+      .style("fill", (d) => enhancedColorScale(d.value))
+      .style("stroke", "#333")
+      .style("stroke-width", 0.3)
       .on("mouseover", (event, d) => {
         // Tooltip
         const tooltip = d3
@@ -141,6 +168,76 @@ export default function AttentionHeatmap({ data }: AttentionHeatmapProps) {
       .style("fill", "#374151")
       .text((d) => (d.length > 8 ? d.substring(0, 8) + "..." : d))
 
+    // Add color legend
+    const legendWidth = 200
+    const legendHeight = 20
+    const legendX = width - legendWidth
+    const legendY = -50
+
+    // Create gradient for legend
+    const legendGradient = svg
+      .append("defs")
+      .append("linearGradient")
+      .attr("id", "legend-gradient")
+      .attr("x1", "0%")
+      .attr("x2", "100%")
+      .attr("y1", "0%")
+      .attr("y2", "0%")
+
+    // Add color stops to match our plasma/inferno-inspired color scale
+    const legendStops = [
+      { offset: "0%", color: "#0d0887" },
+      { offset: "9%", color: "#2d0594" },
+      { offset: "18%", color: "#4c02a1" },
+      { offset: "27%", color: "#6a00a8" },
+      { offset: "36%", color: "#8b0aa5" },
+      { offset: "45%", color: "#a91e9d" },
+      { offset: "54%", color: "#c53a8c" },
+      { offset: "63%", color: "#dd5470" },
+      { offset: "72%", color: "#f0744f" },
+      { offset: "81%", color: "#fb9b06" },
+      { offset: "90%", color: "#f7c932" },
+      { offset: "100%", color: "#fcffa4" },
+    ]
+
+    legendStops.forEach((stop) => {
+      legendGradient.append("stop").attr("offset", stop.offset).attr("stop-color", stop.color)
+    })
+
+    // Add legend rectangle
+    g.append("rect")
+      .attr("x", legendX)
+      .attr("y", legendY)
+      .attr("width", legendWidth)
+      .attr("height", legendHeight)
+      .style("fill", "url(#legend-gradient)")
+      .style("stroke", "#666")
+      .style("stroke-width", 1)
+
+    // Add legend labels
+    g.append("text")
+      .attr("x", legendX)
+      .attr("y", legendY - 5)
+      .style("font-size", "12px")
+      .style("fill", "#374151")
+      .text("Low")
+
+    g.append("text")
+      .attr("x", legendX + legendWidth)
+      .attr("y", legendY - 5)
+      .attr("text-anchor", "end")
+      .style("font-size", "12px")
+      .style("fill", "#374151")
+      .text("High")
+
+    g.append("text")
+      .attr("x", legendX + legendWidth / 2)
+      .attr("y", legendY - 5)
+      .attr("text-anchor", "middle")
+      .style("font-size", "12px")
+      .style("fill", "#374151")
+      .text("Attention Strength")
+
     // Add title
     svg
       .append("text")
@@ -196,7 +293,7 @@ export default function AttentionHeatmap({ data }: AttentionHeatmapProps) {
               onClick={() => setSelectedLayer(index)}
               className={
                 selectedLayer === index
-                  ? "bg-[#F55AC2] text-white hover:bg-[#E04A9F]"
+                  ? "bg-[#0d0887] text-white hover:bg-[#2d0594]"
                   : "border-gray-300 text-gray-700 hover:bg-gray-50"
               }
             >
@@ -212,7 +309,7 @@ export default function AttentionHeatmap({ data }: AttentionHeatmapProps) {
         <div className="text-sm text-gray-600 space-y-2">
           <p>
             <strong>How to read:</strong> Each cell shows how much attention token on the left pays to token on the top.
-            Brighter colors indicate stronger attention.
+            Very dark purple indicates low attention, light cream indicates high attention.
           </p>
           <p>
             <strong>Model:</strong> {data.model_name} | <strong>Layer:</strong> {selectedLayer + 1} of{" "}
